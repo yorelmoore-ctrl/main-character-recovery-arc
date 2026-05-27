@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="sage">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evidence I Exist</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7aaa82">
+  <meta name="description" content="A digital sanctuary for healing, recovery, and becoming.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ATMOSPHERE -->
+  <canvas id="particleCanvas"></canvas>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div id="floatingAffirmations"></div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ACHIEVEMENT POPUP -->
+  <div id="achievementPopup" class="achievement-popup">
+    <span id="achievementPopupIcon"></span>
+    <div>
+      <strong id="achievementPopupTitle"></strong>
+      <p id="achievementPopupDesc"></p>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS MODAL -->
+  <div class="modal-overlay" id="achievementsModal">
+    <div class="modal-box">
+      <button class="modal-close" id="closeAchievements">✕</button>
+      <h2>🏆 Achievements</h2>
+      <p class="modal-sub">Milestones on your healing journey</p>
+      <div id="achievementsList"></div>
+    </div>
+  </div>
+
+  <!-- STICKY NOTES PANEL -->
+  <div id="stickyPanel">
+    <div class="sticky-header">
+      <span>📝 Sticky Notes</span>
+      <div style="display:flex;gap:0.5rem">
+        <button class="sticky-add-btn" id="addStickyBtn">+ New Note</button>
+        <button class="sticky-close-btn" id="closeStickyPanel">✕</button>
+      </div>
+    </div>
+    <div id="stickyContainer"></div>
+  </div>
+
+  <!-- FLOATING ACTION BUTTONS -->
+  <div class="fab-group">
+    <button class="fab" id="achievementsBtn" title="Achievements">🏆</button>
+    <button class="fab" id="stickyBtn" title="Sticky Notes">📝</button>
+  </div>
+
+  <!-- MUSIC PLAYER -->
+  <div id="musicBar">
+    <button class="music-play-btn" id="musicToggle">▶</button>
+    <div class="music-info">
+      <span class="music-label">Healing Frequencies</span>
+      <span class="music-sub" id="musicFreqLabel">174 Hz · Pain Relief</span>
+    </div>
+    <div class="music-controls">
+      <button class="music-freq-btn active" data-freq="0">174</button>
+      <button class="music-freq-btn" data-freq="1">285</button>
+      <button class="music-freq-btn" data-freq="2">396</button>
+      <button class="music-freq-btn" data-freq="3">528</button>
+    </div>
+    <div class="music-tracks">
+      <button class="music-track-btn" data-track="sentimental-jazzy" data-src="assets/music/sentimental-jazzy.mp3">🎷 Jazzy Love</button>
+      <button class="music-track-btn" data-track="lofi-chill" data-src="assets/music/lofi-chill.mp3">🌙 Lo-fi Chill</button>
+      <button class="music-track-btn" data-track="lofi-girl" data-src="assets/music/lofi-girl.mp3">☕ Lo-fi Girl</button>
+    </div>
+    <div class="music-vol-row">
+      <span>🔇</span>
+      <input type="range" id="musicVolume" min="0" max="100" value="35">
+      <span>🔊</span>
+    </div>
+  </div>
+
+  <!-- COVER -->
+  <section id="cover">
+    <div class="cover-content">
+      <p class="cover-label">sacred recovery archive · volume i</p>
+      <h1 class="cover-title">Evidence <em>I Exist</em></h1>
+      <p class="cover-subtitle">Main Character Recovery Arc</p>
+      <div class="cover-divider">✦ ✦ ✦</div>
+      <p class="cover-description">A digital sanctuary for documenting your healing, your softness, your survival, and your becoming.</p>
+      <button class="open-btn" id="enterBtn">Enter Sanctuary</button>
+      <p class="cover-note">made for soft recoveries & sacred transformations</p>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <div id="app">
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">🌿</div>
+
+      <button class="nav-item active" data-page="home"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
+      <button class="nav-item" data-page="evidence"><span class="nav-icon">🌙</span><span class="nav-label">Evidence</span></button>
+      <button class="nav-item" data-page="recovery"><span class="nav-icon">⚔️</span><span class="nav-label">Recovery</span></button>
+      <button class="nav-item" data-page="oracle"><span class="nav-icon">🔮</span><span class="nav-label">Oracle</span></button>
+      <button class="nav-item" data-page="rituals"><span class="nav-icon">🕯️</span><span class="nav-label">Rituals</span></button>
+      <button class="nav-item" data-page="dreams"><span class="nav-icon">✨</span><span class="nav-label">Dreams</span></button>
+      <button class="nav-item" data-page="body"><span class="nav-icon">🌿</span><span class="nav-label">Body & Calm</span></button>
+      <button class="nav-item" data-page="lore"><span class="nav-icon">📜</span><span class="nav-label">Character Lore</span></button>
+      <button class="nav-item" data-page="sanctuary"><span class="nav-icon">🏡</span><span class="nav-label">Sanctuary</span></button>
+
+      <div class="sidebar-spacer"></div>
+
+      <div class="theme-row">
+        <button class="theme-dot active" data-theme="sage"   title="Lavender" style="background:#a688d4"></button>
+        <button class="theme-dot"        data-theme="rose"   title="Orchid"   style="background:#c8a0e8"></button>
+        <button class="theme-dot"        data-theme="moon"   title="Midnight" style="background:#7a55b8"></button>
+        <button class="theme-dot"        data-theme="dawn"   title="Warm"     style="background:#b08968"></button>
+        <button class="theme-dot"        data-theme="forest" title="Iris"     style="background:#6a42a8"></button>
+      </div>
+      <button class="dreamscape-toggle" id="dreamscapeToggle" title="Dreamscape Mode">🌙</button>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- HOME -->
+      <section class="page active" id="home">
+        <div class="page-header">
+          <span class="page-label">welcome back</span>
+          <h1 class="page-title">You Are Still <em>Becoming</em></h1>
+          <p class="page-description">Your healing does not need to look graceful to still be real.</p>
+        </div>
+
+        <div class="quote-card" id="rotatingQuote"></div>
+
+        <div class="card">
+          <h2>🌿 Proof I Existed Today</h2>
+          <p class="prompt">What made today real?</p>
+          <textarea id="dailyCheckIn" placeholder="write softly here..."></textarea>
+          <div class="grid">
+            <input type="text" id="sense_smell" placeholder="What did I smell?">
+            <input type="text" id="sense_laugh" placeholder="What made me laugh?">
+            <input type="text" id="sense_soft"  placeholder="Something soft today">
+            <input type="text" id="sense_win"   placeholder="A tiny win">
+          </div>
+          <div class="save-row">
+            <button class="save-btn" data-save="checkin">Save Reflection</button>
+            <span class="save-status" id="status-checkin"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🌙 Current Mood</h2>
+          <p class="prompt">How are you feeling right now?</p>
+          <div class="mood-grid">
+            <button class="mood-btn" data-mood="Grounded">🌿<br>Grounded</button>
+            <button class="mood-btn" data-mood="Fragile">🌧️<br>Fragile</button>
+            <button class="mood-btn" data-mood="Emotional">🌊<br>Emotional</button>
+            <button class="mood-btn" data-mood="Determined">🔥<br>Determined</button>
+            <button class="mood-btn" data-mood="Numb">🕯️<br>Numb</button>
+            <button class="mood-btn" data-mood="Hopeful">✨<br>Hopeful</button>
+          </div>
+          <p class="mood-display" id="moodDisplay"></p>
+        </div>
+
+        <div class="card water-tracker-card">
+          <h2>💧 Water Tracker</h2>
+          <p class="prompt">Every glass is a small act of love for your body.</p>
+          <div class="water-glasses" id="waterGlasses"></div>
+          <p class="water-message" id="waterMessage">0 / 8 glasses · 0 oz</p>
+        </div>
+
+        <div class="card">
+          <h2>🎨 Mood Palette</h2>
+          <p class="prompt">Pick a color that matches how you feel right now.</p>
+          <div class="mood-color-row">
+            <input type="color" id="moodColorPicker" value="#a688d4" title="Pick your mood color">
+            <span class="mood-color-hint">This color is <em id="moodColorLabel">yours</em></span>
+            <button class="save-btn" id="saveMoodColorBtn" style="margin-left:auto">Save</button>
+          </div>
+          <div id="moodColorPalette" class="mood-color-palette"></div>
+        </div>
+
+        <div class="card affirmation-card">
+          <h2>✨ Daily Affirmation</h2>
+          <p id="affirmationText"></p>
+          <div class="save-row" style="justify-content:center;gap:0.7rem">
+            <button id="affirmationBtn">Generate Affirmation</button>
+            <button class="secondary-btn" id="floatAffirmBtn">🌸 Float It</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🎡 Emotional Wheel</h2>
+          <p class="prompt">Tap an emotion to explore what's underneath.</p>
+          <div class="wheel-grid" id="emotionWheel"></div>
+          <div id="emotionExpanded" class="emotion-expanded"></div>
+        </div>
+      </section>
+
+      <!-- EVIDENCE -->
+      <section class="page" id="evidence">
+        <div class="page-header">
+          <span class="page-label">archive of existence</span>
+          <h1 class="page-title">Evidence <em>You Were Here</em></h1>
+          <p class="page-description">Every tiny proof that you lived today counts.</p>
+        </div>
+
+        <div class="card">
+          <h2>📸 Tiny Proofs</h2>
+          <textarea id="evidenceInput" placeholder="i drank water... i laughed once... i survived today..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="evidence">Save Memory</button>
+            <span class="save-status" id="status-evidence"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📦 Evidence Vault</h2>
+          <p class="prompt">Screenshots, selfies, voice notes — proof you were here.</p>
+          <div class="vault-upload-row">
+            <label class="photo-upload-label vault-upload-btn" for="vaultUpload">
+              <span>📎 Add Files or Photos</span>
+              <input type="file" id="vaultUpload" accept="image/*,audio/*,.pdf,.txt" multiple>
+            </label>
+            <div class="voice-recorder">
+              <button class="save-btn voice-btn" id="voiceStartBtn">🎙️ Record</button>
+              <button class="secondary-btn voice-btn" id="voiceStopBtn" disabled>⏹ Stop</button>
+              <span id="voiceStatus" class="voice-status"></span>
+            </div>
+          </div>
+          <div id="vaultGrid" class="vault-grid"></div>
+        </div>
+
+        <div class="card">
+          <h2>🌸 Soft Victories</h2>
+          <p class="prompt">Tap the ones you did today.</p>
+          <div class="victory-grid">
+            <button class="victory-card" data-victory="Got out of bed"><span class="vcheck">✓</span>Got out of bed</button>
+            <button class="victory-card" data-victory="Ate something"><span class="vcheck">✓</span>Ate something</button>
+            <button class="victory-card" data-victory="Asked for help"><span class="vcheck">✓</span>Asked for help</button>
+            <button class="victory-card" data-victory="Rested without guilt"><span class="vcheck">✓</span>Rested without guilt</button>
+            <button class="victory-card" data-victory="Drank water"><span class="vcheck">✓</span>Drank water</button>
+            <button class="victory-card" data-victory="Went outside"><span class="vcheck">✓</span>Went outside</button>
+            <button class="victory-card" data-victory="Was kind to myself"><span class="vcheck">✓</span>Was kind to myself</button>
+            <button class="victory-card" data-victory="Reached out"><span class="vcheck">✓</span>Reached out</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📖 Your Archive</h2>
+          <div id="entryLog" class="entry-log"><p class="empty-log">Your saved memories will appear here.</p></div>
+          <div class="save-row" style="margin-top:1rem">
+            <button class="secondary-btn" id="exportBtn">Export Journal</button>
+            <button class="danger-btn" id="resetBtn">Clear All</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECOVERY -->
+      <section class="page" id="recovery">
+        <div class="page-header">
+          <span class="page-label">character development</span>
+          <h1 class="page-title">Recovery <em>Arc</em></h1>
+          <p class="page-description">You are writing a new chapter every single day.</p>
+        </div>
+
+        <div class="card">
+          <h2>📊 Character Stats</h2>
+          <p class="prompt">Track how your energy and wellbeing are shifting.</p>
+          <div class="stats-grid">
+            <div class="stat-row">
+              <label class="stat-label">⚡ Energy</label>
+              <div class="range-row"><input type="range" id="statEnergy" min="0" max="100" value="50"><span class="range-value" id="val-statEnergy">50</span></div>
+            </div>
+            <div class="stat-row">
+              <label class="stat-label">💜 Emotional Regulation</label>
+              <div class="range-row"><input type="range" id="statHP" min="0" max="100" value="60"><span class="range-value" id="val-statHP">60</span></div>
+            </div>
+            <div class="stat-row">
+              <label class="stat-label">🌐 Social Battery</label>
+              <div class="range-row"><input type="range" id="statSocial" min="0" max="100" value="25"><span class="range-value" id="val-statSocial">25</span></div>
+            </div>
+            <div class="stat-row">
+              <label class="stat-label">✨ Confidence</label>
+              <div class="range-row"><input type="range" id="statConfidence" min="0" max="100" value="40"><span class="range-value" id="val-statConfidence">40</span></div>
+            </div>
+            <div class="stat-row">
+              <label class="stat-label">🎨 Creativity</label>
+              <div class="range-row"><input type="range" id="statCreativity" min="0" max="100" value="55"><span class="range-value" id="val-statCreativity">55</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🌟 Recovery Arc</h2>
+          <p class="prompt">Where are you in your story right now?</p>
+          <div class="arc-track">
+            <div class="arc-stage" data-arc="surviving">
+              <div class="arc-dot">☁️</div>
+              <span>Surviving</span>
+            </div>
+            <div class="arc-line"></div>
+            <div class="arc-stage" data-arc="rebuilding">
+              <div class="arc-dot">🌱</div>
+              <span>Rebuilding</span>
+            </div>
+            <div class="arc-line"></div>
+            <div class="arc-stage" data-arc="rediscovering">
+              <div class="arc-dot">✨</div>
+              <span>Rediscovering</span>
+            </div>
+            <div class="arc-line"></div>
+            <div class="arc-stage" data-arc="becoming">
+              <div class="arc-dot">🔥</div>
+              <span>Becoming</span>
+            </div>
+          </div>
+          <p class="arc-message" id="arcMessage"></p>
+        </div>
+
+        <div class="card">
+          <h2>💭 Main Character Goals</h2>
+          <textarea id="goalInput" placeholder="what version of you are you becoming?"></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="goals">Save Goals</button>
+            <span class="save-status" id="status-goals"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🌱 Healing Progress</h2>
+          <div class="progress-wrapper">
+            <div class="progress-labels"><span>Surviving</span><span id="progressPercent">0%</span><span>Thriving</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-steps">
+              <button class="step-btn" data-pct="10">🌱</button>
+              <button class="step-btn" data-pct="25">🌿</button>
+              <button class="step-btn" data-pct="40">🌾</button>
+              <button class="step-btn" data-pct="55">🌳</button>
+              <button class="step-btn" data-pct="70">🌸</button>
+              <button class="step-btn" data-pct="85">🌺</button>
+              <button class="step-btn" data-pct="100">✨</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card quest-card">
+          <h2>⚔️ Daily Recovery Quests</h2>
+          <p class="prompt">Small acts of care. Gain XP with every one.</p>
+          <div class="xp-row">
+            <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpFill"></div></div>
+            <span id="xpLabel" class="xp-label">0 / 200 XP</span>
+            <span id="xpLevel" class="xp-level">Level 1</span>
+          </div>
+          <div class="xp-title-row">
+            <span class="xp-title-badge" id="xpTitleBadge">🌑 The Beginning</span>
+            <span class="xp-title-next" id="xpTitleNext">Next title at 50 XP</span>
+          </div>
+          <div class="quest-list" id="questList"></div>
+          <p class="quest-reset-note" id="questResetNote"></p>
+        </div>
+      </section>
+
+      <!-- ORACLE -->
+      <section class="page" id="oracle">
+        <div class="page-header">
+          <span class="page-label">daily wisdom</span>
+          <h1 class="page-title">Oracle <em>Cards</em></h1>
+          <p class="page-description">Let the cards speak what your heart already knows.</p>
+        </div>
+
+        <div class="oracle-categories">
+          <button class="oracle-cat-btn active" data-cat="all">✦ All</button>
+          <button class="oracle-cat-btn" data-cat="healing">🌿 Healing</button>
+          <button class="oracle-cat-btn" data-cat="shadow">🌑 Shadow Work</button>
+          <button class="oracle-cat-btn" data-cat="grounding">🌍 Grounding</button>
+          <button class="oracle-cat-btn" data-cat="encouragement">✨ Encouragement</button>
+        </div>
+
+        <div class="oracle-area">
+          <div class="oracle-scene">
+            <div class="oracle-card" id="oracleCard">
+              <div class="oracle-front">
+                <div class="oracle-front-inner">
+                  <span class="oracle-crest">✦</span>
+                  <p>Click the card to<br>receive your message</p>
+                  <span class="oracle-crest">✦</span>
+                </div>
+              </div>
+              <div class="oracle-back">
+                <span class="oracle-symbol" id="oracleSymbol"></span>
+                <h3 class="oracle-title" id="oracleTitle"></h3>
+                <p class="oracle-prompt" id="oraclePrompt"></p>
+              </div>
+            </div>
+          </div>
+          <button class="save-btn" id="drawCardBtn" style="margin-top:1.2rem">Draw New Card</button>
+        </div>
+
+        <div class="card" style="margin-top:1.4rem">
+          <h2>💭 Your Response</h2>
+          <p class="prompt">What does this message stir in you?</p>
+          <textarea id="oracleResponse" placeholder="The card says... and I feel..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="oracle">Save Reflection</button>
+            <span class="save-status" id="status-oracle"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RITUALS -->
+      <section class="page" id="rituals">
+        <div class="page-header">
+          <span class="page-label">sacred rituals</span>
+          <h1 class="page-title">Daily <em>Rituals</em></h1>
+          <p class="page-description">Small sacred acts that bring you back to yourself.</p>
+        </div>
+
+        <div class="card">
+          <h2>🕯️ Today's Rituals</h2>
+          <p class="prompt">Tap each ritual as you complete it.</p>
+          <div class="ritual-grid">
+            <button class="ritual-card" data-ritual="light-candle"><span class="ritual-icon">🕯️</span><p>Light a candle</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="drink-water"><span class="ritual-icon">🌿</span><p>Drink water slowly</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="listen-music"><span class="ritual-icon">🌙</span><p>Listen to music</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="journal"><span class="ritual-icon">📖</span><p>Journal honestly</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="breathe"><span class="ritual-icon">🌊</span><p>Breathe deeply</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="move-body"><span class="ritual-icon">🌸</span><p>Move your body</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="rest"><span class="ritual-icon">☁️</span><p>Rest without guilt</p><span class="ritual-check">✓</span></button>
+            <button class="ritual-card" data-ritual="gratitude"><span class="ritual-icon">✨</span><p>Find one gratitude</p><span class="ritual-check">✓</span></button>
+          </div>
+          <p class="ritual-count" id="ritualCount">0 of 8 completed today</p>
+        </div>
+
+        <div class="card">
+          <h2>🌊 Breathing Exercise</h2>
+          <div class="breathing-area">
+            <div class="breathing-circle" id="breathingCircle"><span id="breathingText">Press Begin</span></div>
+          </div>
+          <div class="save-row" style="justify-content:center">
+            <button class="save-btn" id="breatheStartBtn">Begin</button>
+            <button class="secondary-btn" id="breatheStopBtn">Stop</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DREAMS -->
+      <section class="page" id="dreams">
+        <div class="page-header">
+          <span class="page-label">future self archive</span>
+          <h1 class="page-title">Dream <em>Life</em></h1>
+          <p class="page-description">The life your future self is already living.</p>
+        </div>
+
+        <!-- FUTURE ME LETTERS -->
+        <div class="card letter-card">
+          <h2>💌 Letters to Future Me</h2>
+          <p class="prompt">Write a letter. Set a date. Unlock it when you're ready.</p>
+          <div class="letter-compose">
+            <input type="text" id="letterSubject" placeholder="Letter subject (e.g. Dear me in 1 year)">
+            <textarea id="letterBody" placeholder="Dear future me..."></textarea>
+            <div class="save-row">
+              <label class="letter-date-label">Open after: <input type="date" id="letterDate"></label>
+              <button class="save-btn" id="saveLetterBtn">Seal Letter 💌</button>
+            </div>
+          </div>
+          <div id="lettersList" class="letters-list"></div>
+        </div>
+
+        <div class="card">
+          <h2>🎵 Soundtrack of My Life</h2>
+          <p class="prompt">Songs that feel like your current chapter.</p>
+          <div class="save-row" style="gap:0.6rem">
+            <input type="text" id="soundtrackInput" placeholder="Song — Artist">
+            <button class="save-btn" id="addSoundtrackBtn">Add</button>
+          </div>
+          <ul id="soundtrackList" class="soundtrack-list"></ul>
+          <div class="spotify-embed">
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>✨ Future Vision</h2>
+          <textarea id="dreamInput" placeholder="describe the life your future self deserves..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="dream">Save Vision</button>
+            <span class="save-status" id="status-dream"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🌟 Things I'm Looking Forward To</h2>
+          <textarea id="lookingForward" placeholder="one day i will... i'm excited about..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="forward">Save Hopes</button>
+            <span class="save-status" id="status-forward"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- BODY & CALM -->
+      <section class="page" id="body">
+        <div class="page-header">
+          <span class="page-label">body · breath · calm</span>
+          <h1 class="page-title">Body <em>&amp; Calm</em></h1>
+          <p class="page-description">Gentle care for your nervous system, one breath at a time.</p>
+        </div>
+
+        <!-- MOVEMENT LIBRARY -->
+        <div class="card">
+          <h2>🤸 Gentle Movement Library</h2>
+          <p class="prompt">Choose what your body needs right now.</p>
+          <div class="movement-tabs" id="movementTabs">
+            <button class="move-tab active" data-tab="bed">🛏️ Bed Stretches</button>
+            <button class="move-tab" data-tab="lowimpact">🚶 Low-Impact</button>
+            <button class="move-tab" data-tab="mobility">🔄 Mobility</button>
+            <button class="move-tab" data-tab="breathe">🌬️ Breathing</button>
+          </div>
+          <div class="movement-panels">
+
+            <div class="move-panel active" data-panel="bed">
+              <div class="move-card" data-id="mc1"><div class="move-header"><span class="move-icon">🌅</span><div><strong>Full Body Stretch</strong><span class="move-meta">2 min · Very gentle</span></div><span class="move-toggle">▾</span></div><div class="move-body">Lie flat on your back. Reach both arms above your head. Point your toes. Breathe in slowly for 5 counts as you stretch long. Hold at the top, then release everything on the exhale. Repeat 3×.</div></div>
+              <div class="move-card" data-id="mc2"><div class="move-header"><span class="move-icon">🤗</span><div><strong>Knee Hug</strong><span class="move-meta">1–2 min · Grounding</span></div><span class="move-toggle">▾</span></div><div class="move-body">Pull both knees gently to your chest. Wrap your arms around your shins. Rock slowly side to side to massage your lower back. Breathe deeply. Stay here as long as feels good.</div></div>
+              <div class="move-card" data-id="mc3"><div class="move-header"><span class="move-icon">🦋</span><div><strong>Butterfly Knees</strong><span class="move-meta">2 min · Hip opening</span></div><span class="move-toggle">▾</span></div><div class="move-body">Bring the soles of your feet together. Let your knees fall open like butterfly wings. Place hands on your belly. Breathe into the openness. Let gravity do the work — no forcing.</div></div>
+              <div class="move-card" data-id="mc4"><div class="move-header"><span class="move-icon">🌀</span><div><strong>Supine Twist</strong><span class="move-meta">3 min · Spine release</span></div><span class="move-toggle">▾</span></div><div class="move-body">Lie on your back. Bend your right knee and let it fall across your body to the left. Stretch your right arm out wide. Look toward your right hand. Hold 30–60 sec each side. Breathe into the twist.</div></div>
+              <div class="move-card" data-id="mc5"><div class="move-header"><span class="move-icon">🦒</span><div><strong>Neck Rolls</strong><span class="move-meta">2 min · Tension release</span></div><span class="move-toggle">▾</span></div><div class="move-body">Sitting or lying. Slowly drop your right ear toward your right shoulder. Hold for 5 breaths. Roll chin to chest. Move to the left side. Go slowly. Never force. Let the weight of your head do the work.</div></div>
+            </div>
+
+            <div class="move-panel" data-panel="lowimpact">
+              <div class="move-card" data-id="mc6"><div class="move-header"><span class="move-icon">💃</span><div><strong>Seated March</strong><span class="move-meta">3 min · Energising</span></div><span class="move-toggle">▾</span></div><div class="move-body">Sit in a chair with feet flat on the floor. Lift your right knee, then left, in a slow marching motion. Let your arms swing naturally. Start slow, then find your own rhythm. Great for mornings when standing feels like too much.</div></div>
+              <div class="move-card" data-id="mc7"><div class="move-header"><span class="move-icon">🌊</span><div><strong>Sway &amp; Shift</strong><span class="move-meta">2 min · Calming</span></div><span class="move-toggle">▾</span></div><div class="move-body">Stand with feet hip-width apart. Gently shift your weight from one foot to the other. Let your arms float. Add a soft sway if it feels good. This gentle rhythmic movement soothes the nervous system.</div></div>
+              <div class="move-card" data-id="mc8"><div class="move-header"><span class="move-icon">🙌</span><div><strong>Overhead Reach</strong><span class="move-meta">2 min · Opening</span></div><span class="move-toggle">▾</span></div><div class="move-body">Standing or seated. Raise both arms overhead. Reach right, then left, creating a gentle side bend. Breathe into the stretch. Lower and repeat. Wakes up the side body without strain.</div></div>
+              <div class="move-card" data-id="mc9"><div class="move-header"><span class="move-icon">🚶</span><div><strong>Slow Mindful Walk</strong><span class="move-meta">5 min · Grounding</span></div><span class="move-toggle">▾</span></div><div class="move-body">Walk very slowly — slower than you think. Feel each heel-to-toe connection with the floor. Coordinate your breath: inhale for 3 steps, exhale for 3 steps. The goal is presence, not distance.</div></div>
+              <div class="move-card" data-id="mc10"><div class="move-header"><span class="move-icon">🧘</span><div><strong>Seated Forward Fold</strong><span class="move-meta">2 min · Releasing</span></div><span class="move-toggle">▾</span></div><div class="move-body">Sit at the edge of a chair. Hinge forward from your hips (not your waist). Let your head hang heavy. Let your arms dangle. Breathe. This position activates the parasympathetic nervous system.</div></div>
+            </div>
+
+            <div class="move-panel" data-panel="mobility">
+              <div class="move-card" data-id="mc11"><div class="move-header"><span class="move-icon">🔄</span><div><strong>Shoulder Rolls</strong><span class="move-meta">1 min · Tension melt</span></div><span class="move-toggle">▾</span></div><div class="move-body">Roll both shoulders slowly backward 8 times, then forward 8 times. Exaggerate the movement — really lift them toward your ears on the way up and let them drop on the way down. Exhale on every drop.</div></div>
+              <div class="move-card" data-id="mc12"><div class="move-header"><span class="move-icon">🤸</span><div><strong>Hip Circles</strong><span class="move-meta">2 min · Hip opening</span></div><span class="move-toggle">▾</span></div><div class="move-body">Stand with hands on hips. Draw a big slow circle with your pelvis — forward, side, back, side. 8 circles one direction, then reverse. Your upper body stays relatively still. Let it feel a little silly.</div></div>
+              <div class="move-card" data-id="mc13"><div class="move-header"><span class="move-icon">🦶</span><div><strong>Ankle Circles</strong><span class="move-meta">2 min · Circulation</span></div><span class="move-toggle">▾</span></div><div class="move-body">Seated. Lift one foot off the floor. Draw 8 slow circles clockwise, then counterclockwise. Point and flex the foot 5 times. Switch sides. Helps with circulation and body awareness.</div></div>
+              <div class="move-card" data-id="mc14"><div class="move-header"><span class="move-icon">🤲</span><div><strong>Wrist &amp; Hand Release</strong><span class="move-meta">1 min · Gentle</span></div><span class="move-toggle">▾</span></div><div class="move-body">Shake your hands loose for 10 seconds. Then make slow circles with each wrist. Spread your fingers wide, then curl them in. Repeat 5×. Especially good if you spend time on screens or clench when anxious.</div></div>
+              <div class="move-card" data-id="mc15"><div class="move-header"><span class="move-icon">🫁</span><div><strong>Rib Cage Breathing</strong><span class="move-meta">2 min · Expansion</span></div><span class="move-toggle">▾</span></div><div class="move-body">Place both hands on the sides of your ribs. As you inhale, try to push your hands apart sideways — like an accordion opening. Exhale and feel the ribs fall. This unlocks stuck tension in the thoracic spine.</div></div>
+            </div>
+
+            <div class="move-panel" data-panel="breathe">
+              <div class="move-card" data-id="mc16"><div class="move-header"><span class="move-icon">📦</span><div><strong>Box Breathing</strong><span class="move-meta">4 min · Regulating</span></div><span class="move-toggle">▾</span></div><div class="move-body">Inhale through your nose for 4 counts. Hold for 4. Exhale through your mouth for 4. Hold empty for 4. Repeat 4–8 rounds. Used by Navy SEALs and therapists alike — it balances your nervous system quickly.</div></div>
+              <div class="move-card" data-id="mc17"><div class="move-header"><span class="move-icon">🔢</span><div><strong>4-7-8 Breath</strong><span class="move-meta">3 min · Sleep &amp; calm</span></div><span class="move-toggle">▾</span></div><div class="move-body">Inhale quietly through your nose for 4. Hold your breath for 7. Exhale completely through your mouth for 8 counts making a whooshing sound. This is one of the most effective techniques for anxiety and pre-sleep calm.</div></div>
+              <div class="move-card" data-id="mc18"><div class="move-header"><span class="move-icon">🌊</span><div><strong>Ocean Breath</strong><span class="move-meta">2 min · Soothing</span></div><span class="move-toggle">▾</span></div><div class="move-body">Breathe in deeply through your nose. Exhale slowly through a slightly open mouth with a soft "haaa" sound — like fogging a mirror. The sound itself activates your vagus nerve and signals safety to your brain.</div></div>
+              <div class="move-card" data-id="mc19"><div class="move-header"><span class="move-icon">💜</span><div><strong>Belly Breathing</strong><span class="move-meta">3 min · Grounding</span></div><span class="move-toggle">▾</span></div><div class="move-body">Place one hand on your belly, one on your chest. Breathe so only the belly hand rises. Chest stays still. Inhale 4, exhale 6. This activates the diaphragm and tells your nervous system it is safe to rest.</div></div>
+              <div class="move-card" data-id="mc20"><div class="move-header"><span class="move-icon">👃</span><div><strong>Alternate Nostril</strong><span class="move-meta">3 min · Balancing</span></div><span class="move-toggle">▾</span></div><div class="move-body">Close your right nostril with your thumb and inhale left for 4. Close both, hold for 2. Open right, exhale for 4. Inhale right for 4. Close, hold. Exhale left. That's one round. Do 5 rounds. Balances both hemispheres of the brain.</div></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- NERVOUS SYSTEM REGULATION TOOLBOX -->
+        <div class="card ns-toolbox">
+          <h2>🧠 Nervous System Toolbox</h2>
+          <p class="prompt">Quick tools for when your system needs support right now.</p>
+
+          <div class="ns-buttons">
+            <button class="ns-btn" data-tool="grounding">🌍 Grounding</button>
+            <button class="ns-btn" data-tool="breathe-timer">⏱️ Breathing Timer</button>
+            <button class="ns-btn" data-tool="sounds">🔊 Calming Sounds</button>
+            <button class="ns-btn" data-tool="soothe">🤍 Self-Soothe</button>
+            <button class="ns-btn" data-tool="emergency">🆘 Comfort List</button>
+          </div>
+
+          <!-- Grounding 5-4-3-2-1 -->
+          <div class="ns-panel" id="nsp-grounding">
+            <h3 class="ns-panel-title">🌍 5-4-3-2-1 Grounding</h3>
+            <p class="ns-panel-sub">This brings you back to the present moment. Take your time.</p>
+            <div class="grounding-steps" id="groundingSteps"></div>
+            <button class="save-btn" id="groundingStartBtn" style="margin-top:1rem">Begin Grounding</button>
+          </div>
+
+          <!-- Breathing Timer -->
+          <div class="ns-panel" id="nsp-breathe-timer">
+            <h3 class="ns-panel-title">⏱️ Breathing Timer</h3>
+            <div class="breath-presets">
+              <button class="breath-preset-btn active" data-pattern="box" data-counts="4,4,4,4">📦 Box</button>
+              <button class="breath-preset-btn" data-pattern="478" data-counts="4,7,8,0">🔢 4-7-8</button>
+              <button class="breath-preset-btn" data-pattern="calm" data-counts="4,0,6,0">💜 Calm</button>
+              <button class="breath-preset-btn" data-pattern="extended" data-counts="5,0,8,0">🌊 Extended</button>
+            </div>
+            <div class="breath-visual-wrap">
+              <div class="breath-ring" id="breathRing">
+                <span class="breath-ring-label" id="breathRingLabel">Ready</span>
+                <span class="breath-ring-count" id="breathRingCount"></span>
+              </div>
+            </div>
+            <div class="save-row" style="justify-content:center;gap:0.6rem;margin-top:0.8rem">
+              <button class="save-btn" id="breathTimerStart">▶ Start</button>
+              <button class="secondary-btn" id="breathTimerStop">Stop</button>
+            </div>
+          </div>
+
+          <!-- Calming Sounds -->
+          <div class="ns-panel" id="nsp-sounds">
+            <h3 class="ns-panel-title">🔊 Calming Sounds</h3>
+            <p class="ns-panel-sub">Generated sounds — no downloads needed. Press to play/stop.</p>
+            <div class="calm-sounds-grid">
+              <button class="calm-sound-btn" data-sound="pink">🌧️ Rain</button>
+              <button class="calm-sound-btn" data-sound="brown">🌊 Ocean</button>
+              <button class="calm-sound-btn" data-sound="hum">🎵 Soft Hum</button>
+              <button class="calm-sound-btn" data-sound="forest">🌿 Forest</button>
+            </div>
+            <p class="calm-sound-status" id="calmSoundStatus">No sound playing</p>
+          </div>
+
+          <!-- Self-Soothing Prompts -->
+          <div class="ns-panel" id="nsp-soothe">
+            <h3 class="ns-panel-title">🤍 Self-Soothing Prompt</h3>
+            <div class="soothe-display" id="sootheDisplay"></div>
+            <button class="save-btn" id="sootheNextBtn" style="margin-top:1rem">Next Prompt</button>
+          </div>
+
+          <!-- Emergency Comfort List -->
+          <div class="ns-panel" id="nsp-emergency">
+            <h3 class="ns-panel-title">🆘 My Emergency Comfort List</h3>
+            <p class="ns-panel-sub">Things that have helped you before. Your personal safety net.</p>
+            <div class="save-row" style="gap:0.5rem;margin-bottom:0.8rem">
+              <input type="text" id="comfortInput" placeholder="Something that helps me when I'm struggling...">
+              <button class="save-btn" id="addComfortBtn">Add</button>
+            </div>
+            <ul id="comfortList" class="comfort-list"></ul>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- CHARACTER LORE -->
+      <section class="page" id="lore">
+        <div class="page-header">
+          <span class="page-label">your character file</span>
+          <h1 class="page-title">Character <em>Lore</em></h1>
+          <p class="page-description">A wiki page for the most important character in your story — you.</p>
+        </div>
+
+        <div class="card lore-id-card">
+          <div class="lore-profile-row">
+            <div class="lore-avatar" id="loreAvatar">🌙</div>
+            <div class="lore-id-info">
+              <input type="text" id="loreCharName" class="lore-name-input" placeholder="Your character's name...">
+              <p class="lore-title-display" id="loreTitleDisplay">🌑 The Beginning</p>
+              <p class="lore-arc-line" id="loreArcLine">Arc stage: —</p>
+            </div>
+          </div>
+          <div class="lore-avatar-picker" id="loreAvatarPicker">
+            <span data-av="🌙">🌙</span><span data-av="🌿">🌿</span><span data-av="🦋">🦋</span>
+            <span data-av="🌹">🌹</span><span data-av="⚗️">⚗️</span><span data-av="🔮">🔮</span>
+            <span data-av="🌊">🌊</span><span data-av="✨">✨</span><span data-av="🌺">🌺</span>
+            <span data-av="🦢">🦢</span><span data-av="🌸">🌸</span><span data-av="🏵️">🏵️</span>
+            <span data-av="🐺">🐺</span><span data-av="🦅">🦅</span><span data-av="🌑">🌑</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🃏 Your Archetypes</h2>
+          <p class="prompt">Which characters live inside you? Select all that resonate.</p>
+          <div class="archetype-grid" id="archetypeGrid">
+            <button class="archetype-chip" data-arch="The Healer">💚 The Healer</button>
+            <button class="archetype-chip" data-arch="The Wanderer">🗺️ The Wanderer</button>
+            <button class="archetype-chip" data-arch="The Empath">💜 The Empath</button>
+            <button class="archetype-chip" data-arch="The Protector">🛡️ The Protector</button>
+            <button class="archetype-chip" data-arch="The Creator">🎨 The Creator</button>
+            <button class="archetype-chip" data-arch="The Seeker">🔍 The Seeker</button>
+            <button class="archetype-chip" data-arch="The Wildling">🌿 The Wildling</button>
+            <button class="archetype-chip" data-arch="The Sage">📜 The Sage</button>
+            <button class="archetype-chip" data-arch="The Rebel">🔥 The Rebel</button>
+            <button class="archetype-chip" data-arch="The Dreamer">✨ The Dreamer</button>
+            <button class="archetype-chip" data-arch="The Mystic">🔮 The Mystic</button>
+            <button class="archetype-chip" data-arch="The Phoenix">🦅 The Phoenix</button>
+            <button class="archetype-chip" data-arch="The Storyteller">📖 The Storyteller</button>
+            <button class="archetype-chip" data-arch="The Soft One">🌙 The Soft One</button>
+            <button class="archetype-chip" data-arch="The Survivor">💙 The Survivor</button>
+            <button class="archetype-chip" data-arch="The Becoming">🌑 The Becoming</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>⚡ Your Strengths</h2>
+          <p class="prompt">What do you bring to the world, even on hard days?</p>
+          <div class="lore-tag-row">
+            <input type="text" id="strengthInput" placeholder="e.g. empathy, resilience, creativity...">
+            <button class="save-btn" id="addStrengthBtn">Add</button>
+          </div>
+          <div class="lore-tags" id="strengthTags"></div>
+        </div>
+
+        <div class="card">
+          <h2>🌑 Your Fears</h2>
+          <p class="prompt">The things your character is working through. They don't define you.</p>
+          <textarea id="loreFears" placeholder="what scares this character most..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="loreFears">Save</button>
+            <span class="save-status" id="status-loreFears"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🌟 Your Dreams</h2>
+          <p class="prompt">What is this character quietly reaching toward?</p>
+          <textarea id="loreDreams" placeholder="the life you are building, slowly and surely..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="loreDreams">Save</button>
+            <span class="save-status" id="status-loreDreams"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🫂 Comfort Things</h2>
+          <p class="prompt">Objects, experiences, and rituals that bring this character back to herself.</p>
+          <div class="lore-tag-row">
+            <input type="text" id="comfortThingInput" placeholder="e.g. hot tea, weighted blanket, rain sounds...">
+            <button class="save-btn" id="addComfortThingBtn">Add</button>
+          </div>
+          <div class="lore-tags" id="comfortThingTags"></div>
+        </div>
+
+        <div class="card">
+          <h2>🎨 Aesthetic Inspirations</h2>
+          <p class="prompt">The vibes and atmospheres that feel like home to this character.</p>
+          <div class="lore-tag-row">
+            <input type="text" id="aestheticInput" placeholder="e.g. dark academia, cottagecore, witchy, soft grunge...">
+            <button class="save-btn" id="addAestheticBtn">Add</button>
+          </div>
+          <div class="lore-tags" id="aestheticTags"></div>
+        </div>
+
+        <div class="card">
+          <h2>📖 What This Character Is Learning</h2>
+          <p class="prompt">The quiet shifts and growing edges happening in this chapter.</p>
+          <textarea id="charLearning" placeholder="this version of you is learning that..."></textarea>
+          <div class="save-row">
+            <button class="save-btn" data-save="charLearning">Save</button>
+            <span class="save-status" id="status-charLearning"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SANCTUARY -->
+      <section class="page" id="sanctuary">
+        <div class="page-header">
+          <span class="page-label">your sacred space</span>
+          <h1 class="page-title">The <em>Sanctuary</em></h1>
+          <p class="page-description">A cozy digital room, ambient sounds, and soft refuge — just for you.</p>
+        </div>
+
+        <div class="card">
+          <h2>🎵 Ambient Sound Room</h2>
+          <p class="prompt">Fill your space with atmosphere. Tap to play, tap again to stop.</p>
+          <div class="ambient-grid" id="ambientGrid">
+            <button class="ambient-btn" data-sound="amb-rain">🌧️<br><span>Rain</span></button>
+            <button class="ambient-btn" data-sound="amb-forest">🌿<br><span>Forest</span></button>
+            <button class="ambient-btn" data-sound="amb-ocean">🌊<br><span>Ocean</span></button>
+            <button class="ambient-btn" data-sound="amb-cafe">☕<br><span>Café</span></button>
+            <button class="ambient-btn" data-sound="amb-tavern">🍂<br><span>Tavern</span></button>
+            <button class="ambient-btn" data-sound="amb-piano">🎹<br><span>Piano</span></button>
+          </div>
+          <p class="ambient-status" id="ambientStatus">Your sanctuary is quiet — choose a sound to fill the space.</p>
+        </div>
+
+        <div class="card">
+          <h2>🏡 Your Virtual Sanctuary</h2>
+          <p class="prompt">Arrange your space. Toggle items to place or remove them.</p>
+          <div class="room-lighting-row" id="roomLightingRow">
+            <button class="room-light-btn active" data-light="day">☀️ Day</button>
+            <button class="room-light-btn" data-light="golden">🌅 Golden</button>
+            <button class="room-light-btn" data-light="candlelit">🕯️ Candlelit</button>
+            <button class="room-light-btn" data-light="night">🌙 Night</button>
+            <button class="room-light-btn" data-light="stars">✨ Stars</button>
+            <button class="room-light-btn" data-light="moonlit">🌌 Moonlit</button>
+          </div>
+          <div class="room-scene" id="roomScene">
+            <div class="room-overlay" id="roomOverlay"></div>
+            <div class="room-wall-line"></div>
+            <div class="room-shelf room-shelf-a"></div>
+            <div class="room-shelf room-shelf-b"></div>
+            <div class="room-window">🪟</div>
+            <div class="room-floor-strip"></div>
+            <div class="room-items-layer" id="roomItemsLayer"></div>
+          </div>
+          <div class="room-palette" id="roomPalette">
+            <div class="palette-section"><span class="palette-cat">🪴 Plants</span><div class="palette-items">
+              <button class="pi" data-item="plant-monstera" data-icon="🪴" data-x="6"  data-y="54" data-label="Monstera">🪴</button>
+              <button class="pi" data-item="plant-flowers"  data-icon="🌸" data-x="14" data-y="60" data-label="Flowers">🌸</button>
+              <button class="pi" data-item="plant-cactus"   data-icon="🌵" data-x="22" data-y="60" data-label="Cactus">🌵</button>
+              <button class="pi" data-item="plant-fern"     data-icon="🌿" data-x="3"  data-y="68" data-label="Fern">🌿</button>
+              <button class="pi" data-item="plant-lavender" data-icon="🪻" data-x="30" data-y="62" data-label="Lavender">🪻</button>
+            </div></div>
+            <div class="palette-section"><span class="palette-cat">🕯️ Candles</span><div class="palette-items">
+              <button class="pi" data-item="candle-pillar"  data-icon="🕯️" data-x="42" data-y="63" data-label="Candle">🕯️</button>
+              <button class="pi" data-item="candle-jar"     data-icon="🫙"  data-x="50" data-y="64" data-label="Jar Candle">🫙</button>
+              <button class="pi" data-item="candle-diya"    data-icon="🪔"  data-x="58" data-y="63" data-label="Diya">🪔</button>
+              <button class="pi" data-item="candle-lantern" data-icon="🏮"  data-x="36" data-y="62" data-label="Lantern">🏮</button>
+            </div></div>
+            <div class="palette-section"><span class="palette-cat">💎 Crystals</span><div class="palette-items">
+              <button class="pi" data-item="crystal-amethyst" data-icon="💜" data-x="74" data-y="28" data-label="Amethyst">💜</button>
+              <button class="pi" data-item="crystal-ball"     data-icon="🔮" data-x="82" data-y="26" data-label="Crystal Ball">🔮</button>
+              <button class="pi" data-item="crystal-quartz"   data-icon="✨"  data-x="90" data-y="30" data-label="Quartz">✨</button>
+            </div></div>
+            <div class="palette-section"><span class="palette-cat">📚 Books &amp; Objects</span><div class="palette-items">
+              <button class="pi" data-item="book-stack"   data-icon="📚" data-x="70" data-y="38" data-label="Books">📚</button>
+              <button class="pi" data-item="book-journal" data-icon="📖" data-x="78" data-y="40" data-label="Journal">📖</button>
+              <button class="pi" data-item="book-tarot"   data-icon="🃏" data-x="86" data-y="38" data-label="Tarot">🃏</button>
+              <button class="pi" data-item="obj-tea"      data-icon="🍵" data-x="62" data-y="70" data-label="Tea">🍵</button>
+              <button class="pi" data-item="obj-moon"     data-icon="🌙" data-x="66" data-y="60" data-label="Moon Jar">🌙</button>
+            </div></div>
+            <div class="palette-section"><span class="palette-cat">🐾 Pets</span><div class="palette-items">
+              <button class="pi" data-item="pet-cat"    data-icon="🐱" data-x="32" data-y="70" data-label="Cat">🐱</button>
+              <button class="pi" data-item="pet-dog"    data-icon="🐶" data-x="44" data-y="71" data-label="Dog">🐶</button>
+              <button class="pi" data-item="pet-bunny"  data-icon="🐇" data-x="56" data-y="72" data-label="Bunny">🐇</button>
+              <button class="pi" data-item="pet-bird"   data-icon="🐦" data-x="38" data-y="36" data-label="Bird">🐦</button>
+            </div></div>
+            <div class="palette-section"><span class="palette-cat">🖼️ Posters</span><div class="palette-items">
+              <button class="pi" data-item="poster-moon"  data-icon="🌙" data-x="12" data-y="10" data-label="Moon Print">🌙</button>
+              <button class="pi" data-item="poster-art"   data-icon="🎨" data-x="32" data-y="8"  data-label="Art Print">🎨</button>
+              <button class="pi" data-item="poster-aff"   data-icon="💜" data-x="52" data-y="10" data-label="Affirmation">💜</button>
+              <button class="pi" data-item="poster-nature"data-icon="🌿" data-x="72" data-y="8"  data-label="Nature">🌿</button>
+            </div></div>
+            <div class="palette-section"><span class="palette-cat">💡 Lights</span><div class="palette-items">
+              <button class="pi" data-item="light-fairy"   data-icon="🌟" data-x="45" data-y="3"  data-label="Fairy Lights">🌟</button>
+              <button class="pi" data-item="light-lamp"    data-icon="🔆" data-x="65" data-y="56" data-label="Warm Lamp">🔆</button>
+              <button class="pi" data-item="light-star"    data-icon="⭐" data-x="25" data-y="5"  data-label="Star">⭐</button>
+            </div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
